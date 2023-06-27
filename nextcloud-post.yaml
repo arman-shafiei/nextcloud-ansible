@@ -8,8 +8,8 @@
     - name: Use https instead of http
       lineinfile:
         path: "{{ base_directory }}/nextcloud/html/config/config.php"
-        regexp: ^\'overwriteprotocol(.*)
+        regexp: 'overwriteprotocol(.*)'
         line: "'overwriteprotocol' => 'https'"
         backrefs: yes
     - name: Restart nextcloud for changes to take effect
-      shell: cd "{{ base_directory }} && docker compose restart app
+      shell: cd "{{ base_directory }}" && docker compose restart app
