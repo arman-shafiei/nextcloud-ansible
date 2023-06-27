@@ -6,3 +6,8 @@ nextcloud_version: 27.0
 base_directory: /opt/nextcloud
 virtual_host: test.arman-projects.com
 letsencrypt_host: arman-projects.com
+cert_files:
+  - original: fullchain1.pem
+    renamed: cert.pem
+  - original: privkey1.pem
+    renamed: key.pem

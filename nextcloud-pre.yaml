@@ -1,4 +1,4 @@
---- # This is an Ansible script to deploy nextcloud on a desired number of machines.
+--- # This is an Ansible script to deploy nextcloud on a desired number of machines before initializing web.
 
 - hosts: prometheus
   user: root
@@ -66,17 +66,24 @@
       with_items:
         - temp_env
         - temp_pass
-
-#    - name: Copy the config files
-#      copy:
-#        src: ./nginx
-#        dest: "{{ base_directory }}"
-#    - name: Generate dhparam
-#      community.crypto.openssl_dhparam:
-#        path: "{{ base_directory }}/nginx/certs/dhparam.pem"
-#        size: 2048
-    
-          #    - name: Build the docker files
-          #      shell: cd "{{ base_directory }}" && docker compose build
-          #    - name: Run docker compose
-          #      shell: cd "{{ base_directory }}" && docker compose up -d
+    - name: Copy the config files
+      copy:
+        src: ./nginx
+        dest: "{{ base_directory }}"
+    - name: Generate dhparam
+      community.crypto.openssl_dhparam:
+        path: "{{ base_directory }}/nginx/certs/dhparam.pem"
+        size: 2048
+    - name: Get SSL Certificate
+      shell: certbot certonly -q --standalone -m devops@xaas.ir -d {{ virtual_host }} --agree-tos
+    - name: Move certificates to nginx directory
+      copy:
+        src: "/etc/letsencrypt/archive/{{ virtual_host }}/{{ item.original }}"
+        dest: "{{ base_directory }}/nginx/certs/{{ item.renamed }}"
+        remote_src: yes
+      with_items:
+        - "{{ cert_files }}"
+    - name: Build the docker files
+      shell: cd "{{ base_directory }}" && docker compose build
+    - name: Run docker compose
+      shell: cd "{{ base_directory }}" && docker compose up -d

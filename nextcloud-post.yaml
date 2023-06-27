@@ -1,4 +1,4 @@
---- # This is an Ansible script to deploy nextcloud on a desired number of machines.
+--- # This is an Ansible script to deploy nextcloud on a desired number of machines after initializing web.
 
 - hosts: prometheus
   user: root

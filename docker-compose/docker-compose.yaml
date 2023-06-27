@@ -15,7 +15,6 @@ services:
       - ./nginx/cache:/var/nginx/cache
       - ./nginx/log:/var/log/nginx
       - ./nginx/certs:/etc/nginx/certs
-      - ./nginx/certbot/letsencrypt:/etc/letsencrypt
       - /etc/localtime:/etc/localtime:ro
 
   db:
