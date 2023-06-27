@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+   nginx:
+     networks:
+       nginx:
+       drive:
+         ipv4_address: 192.168.10.3
+#===================================
+   db:
+     networks:
+       drive:
+         ipv4_address: 192.168.10.4
+#===================================
+   app:
+     networks:
+       nextcloud:
+       drive:
+         ipv4_address: 192.168.10.5
+#===================================
+ 
+ 
+networks:
+#------- internet access ---------------------------------------
+ 
+   nginx:
+   nextcloud:
+ 
+#------- internal access ---------------------------------------
+   drive:
+     internal: true
+     ipam:
+       driver: default
+       config:
+         - subnet: 192.168.10.0/24

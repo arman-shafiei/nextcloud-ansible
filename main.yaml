@@ -1,0 +1,82 @@
+--- # This is an Ansible script to deploy nextcloud on a desired number of machines.
+
+- hosts: prometheus
+  user: root
+  gather_facts: true
+  vars_files: ./vars.yaml
+  tasks:
+    - name: Update the packages (APT based)
+      apt:
+        name: '*'
+        state: latest
+        update_cache: yes
+        only_upgrade: yes
+      when: ansible_os_family == "Debian"
+    - name: Remove packages not needed anymore (Debian based)
+      apt:
+        autoremove: yes
+      when: ansible_os_family == "Debian"
+    - name: Update the packages (YUM based)
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+        update_only: yes
+      when: ansible_os_family == "RedHat"
+    - name: Remove packates not needed anymore (YUM based)
+      yum:
+        autoremove: yes
+      when: ansible_os_family == "RedHat"
+    - name: Create base directory for nextcloud
+      file:
+        path: "{{ base_directory }}"
+        state: directory
+        mode: '0775'
+    - name: Copy the docker compose file
+      copy:
+        src: ./docker-compose/docker-compose.yaml
+        dest: "{{ base_directory }}/docker-compose.yaml"
+    - name: Copy the docker compose network file
+      copy:
+        src: ./docker-compose/network.yaml
+        dest: "{{ base_directory }}/network.yaml"
+    - name: Generate secrets
+      shell: for i in `seq 2`; do tr -dc "A-Z0-9^*{}()a-z" < /dev/urandom | head -c 16 >> /tmp/temp_pass; echo >> /tmp/temp_pass; done
+    - name: Write temporary environments
+      shell: echo "{{ item }}=" >> /tmp/temp_env
+      with_items:
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_PASSWORD
+    - name: Assign environments with secrets
+      shell: paste -d "" /tmp/temp_env /tmp/temp_pass >> {{ base_directory }}/.env
+    - name: Add nginx version
+      shell: echo "NGINX_VERSION={{ nginx_version }}" >> {{ base_directory }}/.env
+    - name: Add database version
+      shell: echo "DB_VERSION={{ database_version }}" >> {{ base_directory }}/.env
+    - name: Add nextcloud version
+      shell: echo "NEXTCLOUD_VERSION={{ nextcloud_version }}" >> {{ base_directory }}/.env
+    - name: Add vhost variable
+      shell: echo "VHOST={{ virtual_host }}" >> {{ base_directory }}/.env
+    - name: Add letsencrypt host variable
+      shell: echo "LETSENCRYPT_HOST={{ letsencrypt_host }}" >> {{ base_directory }}/.env
+    - name: Remove temporary files
+      file:
+        path: "/tmp/{{ item }}"
+        state: absent
+      with_items:
+        - temp_env
+        - temp_pass
+
+#    - name: Copy the config files
+#      copy:
+#        src: ./nginx
+#        dest: "{{ base_directory }}"
+#    - name: Generate dhparam
+#      community.crypto.openssl_dhparam:
+#        path: "{{ base_directory }}/nginx/certs/dhparam.pem"
+#        size: 2048
+    
+          #    - name: Build the docker files
+          #      shell: cd "{{ base_directory }}" && docker compose build
+          #    - name: Run docker compose
+          #      shell: cd "{{ base_directory }}" && docker compose up -d

@@ -1,0 +1,53 @@
+version: '3.8'
+ 
+services:
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    container_name: nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl.conf:/etc/nginx/ssl.conf
+      - ./nginx/cache:/var/nginx/cache
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/certbot/letsencrypt:/etc/letsencrypt
+      - /etc/localtime:/etc/localtime:ro
+
+  db:
+    image: mariadb:${DB_VERSION}
+    container_name: mariadb
+    volumes:
+      - ./mariadb:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    restart: unless-stopped
+   
+  app:
+    image: nextcloud:${NEXTCLOUD_VERSION}
+    container_name: nextcloud
+    depends_on:
+      - db
+    volumes:
+      - ./nextcloud/html:/var/www/html
+      - /etc/localtime:/etc/localtime:ro
+      - ./nextcloud/php:/usr/local/etc/php
+      - ./nextcloud/apache/security.conf:/etc/apache2/conf-available/security.conf
+    environment:
+      - PHP_UPLOAD_LIMIT=20G
+      - VIRTUAL_HOST=${VHOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=devops@xaas.ir
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024"
