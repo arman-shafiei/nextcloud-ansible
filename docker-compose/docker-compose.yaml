@@ -40,7 +40,6 @@ services:
       - ./nextcloud/html:/var/www/html
       - /etc/localtime:/etc/localtime:ro
       - ./nextcloud/php:/usr/local/etc/php
-      - ./nextcloud/apache/security.conf:/etc/apache2/conf-available/security.conf
     environment:
       - PHP_UPLOAD_LIMIT=20G
       - VIRTUAL_HOST=${VHOST}
