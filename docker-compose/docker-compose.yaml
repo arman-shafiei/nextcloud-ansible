@@ -39,7 +39,6 @@ services:
     volumes:
       - ./nextcloud/html:/var/www/html
       - /etc/localtime:/etc/localtime:ro
-      - ./nextcloud/php:/usr/local/etc/php
     environment:
       - PHP_UPLOAD_LIMIT=20G
       - VIRTUAL_HOST=${VHOST}
