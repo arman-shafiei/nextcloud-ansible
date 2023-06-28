@@ -12,6 +12,18 @@ virtual_host: test.arman-projects.com
 
 letsencrypt_host: arman-projects.com
 
+non_secret_vars:
+  - name: NGINX_VERSION
+    value: stable-alpine
+  - name: DB_VERSION
+    value: 10.9.7
+  - name: NEXTCLOUD_VERSION
+    value: 27.0
+  - name: VHOST
+    value: test.arman-projects.com
+  - name: LETSENCRYPT_HOST
+    value: arman-projects.com
+
 cert_files:
   - original: fullchain1.pem
     renamed: cert.pem

@@ -60,20 +60,25 @@
     - name: Assign environments with secrets
       shell: paste -d "" /tmp/temp_env /tmp/temp_pass >> {{ base_directory }}/.env
 
-    - name: Add nginx version
-      shell: echo "NGINX_VERSION={{ nginx_version }}" >> {{ base_directory }}/.env
+#    - name: Add nginx version
+#      shell: echo "NGINX_VERSION={{ nginx_version }}" >> {{ base_directory }}/.env
+#
+#    - name: Add database version
+#      shell: echo "DB_VERSION={{ database_version }}" >> {{ base_directory }}/.env
+#
+#    - name: Add nextcloud version
+#      shell: echo "NEXTCLOUD_VERSION={{ nextcloud_version }}" >> {{ base_directory }}/.env
+#
+#    - name: Add vhost variable
+#      shell: echo "VHOST={{ virtual_host }}" >> {{ base_directory }}/.env
+#
+#    - name: Add letsencrypt host variable
+#      shell: echo "LETSENCRYPT_HOST={{ letsencrypt_host }}" >> {{ base_directory }}/.env
 
-    - name: Add database version
-      shell: echo "DB_VERSION={{ database_version }}" >> {{ base_directory }}/.env
-
-    - name: Add nextcloud version
-      shell: echo "NEXTCLOUD_VERSION={{ nextcloud_version }}" >> {{ base_directory }}/.env
-
-    - name: Add vhost variable
-      shell: echo "VHOST={{ virtual_host }}" >> {{ base_directory }}/.env
-
-    - name: Add letsencrypt host variable
-      shell: echo "LETSENCRYPT_HOST={{ letsencrypt_host }}" >> {{ base_directory }}/.env
+    - name: Assign non-secret variables
+      shell: echo "{{ item.name }}={{ item.value }}" >> {{ base_directory }}/.env
+      with_items:
+        - "{{ non_secret_vars }}"
 
     - name: Remove temporary files
       file:
