@@ -65,6 +65,14 @@
       with_items:
         - "{{ non_secret_vars }}"
 
+    - name: Assign private subnet
+      shell: echo "PRIVATE_SUBNET={{ private_ip_subnet }}" >> {{ base_directory }}/.env
+
+    - name: Assign private IPs
+      shell: echo "{{ item.svc }}_IP={{ item.ip }}" >> {{ base_directory }}/.env
+      with_items:
+        - "{{ private_ip_addr }}"
+
     - name: Remove temporary files
       file:
         path: "/tmp/{{ item }}"
@@ -85,7 +93,7 @@
         mode: '0755'
 
     - name: Get SSL Certificate
-      shell: certbot certonly -q --standalone -m devops@xaas.ir -d {{ virtual_host }} --agree-tos
+      shell: certbot certonly -q --standalone -m {{ letsencrypt_email }} -d {{ virtual_host }} --agree-tos
 
     - name: Move certificates to nginx directory
       copy:

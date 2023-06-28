@@ -14,8 +14,20 @@ non_secret_vars:
   - name: LETSENCRYPT_HOST
     value: arman-projects.com
 
+letsencrypt_email: devops@xaas.ir
+
 cert_files:
   - original: fullchain1.pem
     renamed: cert.pem
   - original: privkey1.pem
     renamed: key.pem
+
+private_ip_subnet: 192.168.1.0/24
+
+private_ip_addr:
+  - svc: NGINX
+    ip: 192.168.10.3
+  - svc: DB
+    ip: 192.168.10.4
+  - svc: APP
+    ip: 192.168.10.5
