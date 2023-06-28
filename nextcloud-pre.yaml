@@ -104,4 +104,4 @@
       shell: cd "{{ base_directory }}" && docker compose build
 
     - name: Run docker compose
-      shell: cd "{{ base_directory }}" && docker compose up -d
+      shell: cd "{{ base_directory }}" && docker compose -f docker-compose.yaml -f network.yaml up -d
