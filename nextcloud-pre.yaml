@@ -60,21 +60,6 @@
     - name: Assign environments with secrets
       shell: paste -d "" /tmp/temp_env /tmp/temp_pass >> {{ base_directory }}/.env
 
-#    - name: Add nginx version
-#      shell: echo "NGINX_VERSION={{ nginx_version }}" >> {{ base_directory }}/.env
-#
-#    - name: Add database version
-#      shell: echo "DB_VERSION={{ database_version }}" >> {{ base_directory }}/.env
-#
-#    - name: Add nextcloud version
-#      shell: echo "NEXTCLOUD_VERSION={{ nextcloud_version }}" >> {{ base_directory }}/.env
-#
-#    - name: Add vhost variable
-#      shell: echo "VHOST={{ virtual_host }}" >> {{ base_directory }}/.env
-#
-#    - name: Add letsencrypt host variable
-#      shell: echo "LETSENCRYPT_HOST={{ letsencrypt_host }}" >> {{ base_directory }}/.env
-
     - name: Assign non-secret variables
       shell: echo "{{ item.name }}={{ item.value }}" >> {{ base_directory }}/.env
       with_items:
@@ -93,10 +78,11 @@
         src: ./nginx
         dest: "{{ base_directory }}"
 
-    - name: Generate dhparam
-      community.crypto.openssl_dhparam:
-        path: "{{ base_directory }}/nginx/certs/dhparam.pem"
-        size: 2048
+    - name: Create certs directory
+      file:
+        path: "{{ base_directory}}/nginx/certs"
+        state: directory
+        mode: '0755'
 
     - name: Get SSL Certificate
       shell: certbot certonly -q --standalone -m devops@xaas.ir -d {{ virtual_host }} --agree-tos
@@ -108,6 +94,11 @@
         remote_src: yes
       with_items:
         - "{{ cert_files }}"
+
+    - name: Generate dhparam
+      community.crypto.openssl_dhparam:
+        path: "{{ base_directory }}/nginx/certs/dhparam.pem"
+        size: 2048
 
     - name: Build the docker files
       shell: cd "{{ base_directory }}" && docker compose build
