@@ -1,11 +1,17 @@
 --- # This file contains variables used by main ansible file
 
 nginx_version: stable-alpine
+
 database_version: 10.9.7
+
 nextcloud_version: 27.0
+
 base_directory: /opt/nextcloud
+
 virtual_host: test.arman-projects.com
+
 letsencrypt_host: arman-projects.com
+
 cert_files:
   - original: fullchain1.pem
     renamed: cert.pem
