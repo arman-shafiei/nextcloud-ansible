@@ -13,7 +13,8 @@ You will be needing the following:
 
 **3-** Ansible installed at least version 2.
 
-**4-** Install *crypto* module to add openssl functionalities to Ansible:
+**4-** *crypto* module already present to use openssl functionalities in Ansible.
+If It's not installed, install it by:
 ```
 ansible-galaxy collection install community.crypto
 ```
