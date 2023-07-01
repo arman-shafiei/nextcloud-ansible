@@ -22,11 +22,6 @@
         update_only: yes
       when: ansible_os_family == "RedHat"
 
-    - name: Remove packates not needed anymore (YUM based)
-      yum:
-        autoremove: yes
-      when: ansible_os_family == "RedHat"
-
     - name: Create base directory for nextcloud
       file:
         path: "{{ base_directory }}"
