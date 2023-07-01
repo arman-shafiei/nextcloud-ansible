@@ -18,3 +18,22 @@ If It's not installed, install it by:
 ```
 ansible-galaxy collection install community.crypto
 ```
+
+## How to use it
+Change the *vars.yaml* variables to suit your needs.
+
+Add your hosts to *inventory* file or use your own inventory file.
+
+There are two Ansible playbooks: **nextcloud-pre.yaml** & **nextcloud-post.yaml**.
+
+**nextcloud-pre.yaml** is the scripts needed to run the Nextcloud on machines.
+**nextcloud-post.yaml** is the scripts to finish deploying Nextcloud after first initialization by web interface.
+
+Run the script:
+```
+ansible-playbook -i inventory nextcloud-pre.yaml
+```
+After finishing setting up Nextcloud by Web UI, run the second playbook:
+```
+ansible-playbook -i inventory nextcloud-post.yaml
+```
