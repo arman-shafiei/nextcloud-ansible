@@ -14,11 +14,6 @@
         only_upgrade: yes
       when: ansible_os_family == "Debian"
 
-    - name: Remove packages not needed anymore (Debian based)
-      apt:
-        autoremove: yes
-      when: ansible_os_family == "Debian"
-
     - name: Update the packages (YUM based)
       yum:
         name: '*'
