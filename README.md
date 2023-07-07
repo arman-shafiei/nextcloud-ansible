@@ -4,7 +4,9 @@ An Ansible script used to deploy Nextcloud instance.
 
 This script can be used to deploy a number of Nextcloud instances on different machines with different domains.
 
+
 ## Prerequisites
+
 You will be needing the following:
 
 **1-** Linux machines with Python installed.
@@ -19,7 +21,23 @@ If It's not installed, install it by:
 ansible-galaxy collection install community.crypto
 ```
 
+## Directory Structure
+
+**docker-compose**: Contains files *docker-compose.yaml* as main docker compose file and *network.yaml* as network configurations.
+
+**nginx**: Contains configuration and certificate files for *Nginx* container.
+
+**inventory**: Ansible inventory file.
+
+**nextcloud-pre.yaml**: Ansible playbook to deploy Nextcloud before setting up initialization via web interface.
+
+**nextcloud-post.yaml**: Ansible playbook to deploy Nextcloud after setting up initialization via web interface.
+
+**vars.yaml**: Variables used by playbooks which should be changed based on your needs.
+
+
 ## How to use it
+
 Change the *vars.yaml* variables to suit your needs.
 
 Add your hosts to *inventory* file or use your own inventory file.
