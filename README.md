@@ -1,6 +1,6 @@
 # nextcloud-ansible
 
-An Ansible script used to deploy a Nextcloud instance.
+An Ansible script used to deploy the Nextcloud instance.
 
 This script can be used to deploy a number of Nextcloud instances on different machines with different domains.
 
