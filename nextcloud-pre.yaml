@@ -1,6 +1,6 @@
 --- # This is an Ansible script to deploy nextcloud on a desired number of machines before initializing web.
 
-- hosts: prometheus
+- hosts: all
   user: root
   gather_facts: true
   vars_files: ./vars.yaml
