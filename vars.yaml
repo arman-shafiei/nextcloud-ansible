@@ -14,7 +14,7 @@ non_secret_vars:
   - name: LETSENCRYPT_HOST
     value: arman-projects.com
 
-letsencrypt_email: devops@xaas.ir
+letsencrypt_email: devops@mail.arman-projects.com
 
 virtual_host: test-next.arman-projects.com
 
