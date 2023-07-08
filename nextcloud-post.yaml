@@ -1,5 +1,4 @@
---- # This is an Ansible script to deploy nextcloud on a desired number of machines after initializing web.
-
+--- # This is an Ansible script to deploy nextcloud on a desired number of machines after initializing via Web UI.
 - hosts: all
   user: root
   gather_facts: true
